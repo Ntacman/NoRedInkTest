@@ -1,0 +1,36 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="tests.js"></script>
+
+<div class="app" id="app">
+	<button v-on:click="run_tests()">Start Tests</button>
+	Total Passed: {{ tests.filter(test => test.pass == true ).length }}
+	Total Failed: {{ tests.filter(test => test.pass == false ).length }}
+	Total Running: {{ tests.filter(test => test.started == true && test.pass == null ).length }}
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="test in sortedList">
+				<td>{{test.name}}</td>
+				<td>{{test.description}}</td>
+				<template v-if="test.started == false">
+					<td>Not started</td>
+				</template>
+				<template v-else>
+					<template v-if="test.pass == null">
+						<td>Running</td>
+					</template>
+					<template v-else>
+						<td>{{ test.pass == true ? 'Pass' : 'Fail' }}</td>
+					</template>
+				</template>
+			</tr>
+		</tbody>
+	</table>
+	<h1>{{ tests.filter(test => test.started == true && test.pass != null ).length == tests.length ? 'All tests complete.' : ''}}</h1>
+</div>
